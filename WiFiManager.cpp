@@ -68,6 +68,7 @@ const char* WiFiManagerParameter::getCustomHTML() {
 
 
 WiFiManager::WiFiManager() {
+    _debug_stream = &Serial;
     _max_params = WIFI_MANAGER_MAX_PARAMS;
     _params = (WiFiManagerParameter**)malloc(_max_params * sizeof(WiFiManagerParameter*));
 }
@@ -391,6 +392,10 @@ void WiFiManager::setConnectTimeout(unsigned long seconds) {
 
 void WiFiManager::setDebugOutput(boolean debug) {
   _debug = debug;
+}
+
+void WiFiManager::setDebugStream(Stream *debug_stream) {
+  _debug_stream = debug_stream;
 }
 
 void WiFiManager::setAPStaticIPConfig(IPAddress ip, IPAddress gw, IPAddress sn) {
@@ -777,8 +782,8 @@ void WiFiManager::setRemoveDuplicateAPs(boolean removeDuplicates) {
 template <typename Generic>
 void WiFiManager::DEBUG_WM(Generic text) {
   if (_debug) {
-    Serial.print("*WM: ");
-    Serial.println(text);
+    _debug_stream->print("*WM: ");
+    _debug_stream->println(text);
   }
 }
 
